@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Planes: crea y comparte una invitación.">
+  <title>Planes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="landing">
+    <div class="landing-shade"></div>
+    <div class="landing-content">
+      <p class="kicker">PARA NUESTRO PRÓXIMO ENCUENTRO</p>
+      <h1>PLA<span>NES</span></h1>
+      <p class="intro">Elige un plan, prepara los detalles y comparte la invitación.</p>
+      <button class="primary-button" data-open-modal>Planificar <span>→</span></button>
+    </div>
+    <p class="signature">SIEMPRE EN EL MISMO EQUIPO · 07</p>
+  </main>
+
+  <div class="modal" id="appointmentModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="form-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close-button" data-close-modal aria-label="Cerrar">×</button>
+      <p class="panel-kicker">NUEVO PLAN</p>
+      <h2 id="modalTitle">Planificar cita</h2>
+      <p class="panel-intro">Completa los detalles para crear la invitación.</p>
+
+      <form id="appointmentForm">
+        <label class="field full">
+          <span>¿Qué vamos a hacer?</span>
+          <select id="plan" name="plan" required>
+            <option value="trotar">🏃 Ir a trotar</option>
+            <option value="salidita">🌄 Salidita</option>
+            <option value="sorprendeme">🎁 Sorpréndeme</option>
+            <option value="juntos">❤️ Solo estar juntos</option>
+            <option value="comer">🍽️ Salir a comer</option>
+          </select>
+        </label>
+        <div class="form-row">
+          <label class="field"><span>Fecha</span><input type="date" id="fecha" name="fecha" required></label>
+          <label class="field"><span>Hora</span><input type="time" id="hora" name="hora" required></label>
+        </div>
+        <label class="field full"><span>Mensaje</span><textarea id="descripcion" name="descripcion" maxlength="300" rows="3" placeholder="Escribe algo si se va escondida xd"></textarea></label>
+        <label class="field full">
+          <span>De parte de</span>
+          <select id="creado_por" name="creado_por" required>
+            <option value="SCHEZ">Schez</option>
+            <option value="Britney">Britney</option>
+            <option value="Betzabeth xd">Betzabeth xd</option>
+          </select>
+        </label>
+        <p class="form-error" id="formError" role="alert"></p>
+        <button class="primary-button form-submit" type="submit">Crear invitación <span>→</span></button>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal result-modal" id="resultModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-result></div>
+    <section class="result-panel" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+      <button class="close-button" data-close-result aria-label="Cerrar">×</button>
+      <p class="panel-kicker">LISTA PARA ENVIAR</p>
+      <h2 id="resultTitle">Tu invitación</h2>
+      <img id="invitationPreview" alt="Vista previa de la invitación creada">
+      <div class="result-actions">
+        <button class="primary-button" id="shareButton">Compartir imagen</button>
+        <button class="secondary-button" id="whatsappButton">Abrir WhatsApp</button>
+        <button class="text-button" id="downloadButton">Descargar imagen</button>
+      </div>
+      <p class="share-help">Descarga la imagen y adjúntala en WhatsApp.</p>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
