@@ -36,7 +36,7 @@ function drawInvitation(data) {
   ctx.fillText(`FECHA   ${formatDate(data.fecha).toUpperCase()}`,180,675);
   ctx.fillText(`HORA     ${data.hora}`,180,730);
   if(data.descripcion){ ctx.textAlign="center"; ctx.fillStyle="#aab3ae"; ctx.font="italic 31px Arial"; wrapText(ctx,`“${data.descripcion}”`,540,960,780,48,3); }
-  ctx.fillStyle="#f6f7f5"; ctx.font="bold 26px Arial"; ctx.fillText(data.creado_por?`TU COMPAÑERO/A: ${data.creado_por.toUpperCase()}`:"JUNTOS SOMOS MÁS FUERTES",540,1160);
+  ctx.fillStyle="#f6f7f5"; ctx.font="bold 26px Arial"; ctx.fillText(data.creado_por?`ATT: ${data.creado_por.toUpperCase()}`:"JUNTOS SOMOS MÁS FUERTES",540,1160);
   ctx.fillStyle="#d71920"; ctx.font="42px Arial"; ctx.fillText("♥",540,1225);
   return canvas;
 }
