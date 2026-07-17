@@ -12,6 +12,8 @@ function formatDate(value) { return new Intl.DateTimeFormat("es-EC",{weekday:"lo
 function openModal() { $("#appointmentForm").reset(); $("#fecha").value=todayISO(); $("#hora").value="19:00"; $("#appointmentModal").classList.add("open"); $("#appointmentModal").setAttribute("aria-hidden","false"); document.body.classList.add("modal-open"); setTimeout(()=>$("#plan").focus(),250); }
 function closeModal() { $("#appointmentModal").classList.remove("open"); $("#appointmentModal").setAttribute("aria-hidden","true"); document.body.classList.remove("modal-open"); }
 function closeResult() { $("#resultModal").classList.remove("open"); $("#resultModal").setAttribute("aria-hidden","true"); document.body.classList.remove("modal-open"); }
+function openGallery() { $("#galleryView").classList.add("open"); $("#galleryView").setAttribute("aria-hidden","false"); document.body.classList.add("modal-open"); setTimeout(()=>$(".gallery-close").focus(),250); }
+function closeGallery() { $("#galleryView").classList.remove("open"); $("#galleryView").setAttribute("aria-hidden","true"); document.body.classList.remove("modal-open"); }
 function toast(message) { const el=$("#toast"); el.textContent=message; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),2500); }
 
 function wrapText(ctx,text,x,y,maxWidth,lineHeight,maxLines=3) {
@@ -61,6 +63,6 @@ function openWhatsApp() {
 }
 
 $("#appointmentForm").addEventListener("submit",async(event)=>{ event.preventDefault(); const f=new FormData(event.currentTarget); const data=Object.fromEntries(f.entries()); const button=event.currentTarget.querySelector("button[type=submit]"); button.disabled=true; button.textContent="Creando..."; try{ await showInvitation(data); }catch(error){ $("#formError").textContent="No se pudo crear la imagen. Intenta otra vez."; console.error(error); }finally{ button.disabled=false; button.innerHTML='Crear la invitación <span>→</span>'; } });
-document.addEventListener("click",event=>{ if(event.target.closest("[data-open-modal]"))openModal(); if(event.target.closest("[data-close-modal]"))closeModal(); if(event.target.closest("[data-close-result]"))closeResult(); });
+document.addEventListener("click",event=>{ if(event.target.closest("[data-open-modal]"))openModal(); if(event.target.closest("[data-close-modal]"))closeModal(); if(event.target.closest("[data-close-result]"))closeResult(); if(event.target.closest("[data-open-gallery]"))openGallery(); if(event.target.closest("[data-close-gallery]"))closeGallery(); });
 $("#shareButton").addEventListener("click",shareImage); $("#downloadButton").addEventListener("click",downloadImage); $("#whatsappButton").addEventListener("click",openWhatsApp);
-document.addEventListener("keydown",event=>{ if(event.key==="Escape"){closeModal();closeResult();} });
+document.addEventListener("keydown",event=>{ if(event.key==="Escape"){closeModal();closeResult();closeGallery();} });
