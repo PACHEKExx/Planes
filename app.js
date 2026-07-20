@@ -22,7 +22,17 @@ function wrapText(ctx,text,x,y,maxWidth,lineHeight,maxLines=3) {
   if(line) ctx.fillText(line.trim(),x,y); return y;
 }
 
-function roundedRect(ctx,x,y,w,h,r) { ctx.beginPath(); ctx.roundRect(x,y,w,h,r); ctx.fill(); }
+function roundedRect(ctx,x,y,w,h,r) {
+  const radius=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+radius,y);
+  ctx.arcTo(x+w,y,x+w,y+h,radius);
+  ctx.arcTo(x+w,y+h,x,y+h,radius);
+  ctx.arcTo(x,y+h,x,y,radius);
+  ctx.arcTo(x,y,x+w,y,radius);
+  ctx.closePath();
+  ctx.fill();
+}
 function drawInvitation(data) {
   const canvas=document.createElement("canvas"); canvas.width=1080; canvas.height=1350; const ctx=canvas.getContext("2d");
   ctx.fillStyle="#080b0a"; ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -46,13 +56,29 @@ function drawInvitation(data) {
 async function showInvitation(data) {
   const canvas=drawInvitation(data); currentData=data;
   currentBlob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png",1));
+  if(!currentBlob) throw new Error("El navegador no pudo convertir la invitacion en una imagen PNG.");
   $("#invitationPreview").src=URL.createObjectURL(currentBlob);
   closeModal(); $("#resultModal").classList.add("open"); $("#resultModal").setAttribute("aria-hidden","false"); document.body.classList.add("modal-open");
   const file=new File([currentBlob],"invitacion-nuestros-dias.png",{type:"image/png"});
   $("#shareButton").hidden=!(navigator.share&&navigator.canShare?.({files:[file]}));
 }
 
-function downloadImage() { const a=document.createElement("a"); a.href=URL.createObjectURL(currentBlob); a.download="invitacion-nuestros-dias.png"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1); }
+function downloadImage() {
+  if(!currentBlob) { toast("Primero crea una invitacion"); return; }
+  const url=URL.createObjectURL(currentBlob);
+  if(isIOS()) {
+    const imageWindow=window.open(url,"_blank");
+    if(!imageWindow) window.location.href=url;
+    toast("Mantén pulsada la imagen para guardarla");
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+    return;
+  }
+  const a=document.createElement("a");
+  a.href=url; a.download="invitacion-nuestros-dias.png";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
 async function shareImage() {
   const file=new File([currentBlob],"invitacion-nuestros-dias.png",{type:"image/png"});
   try { await navigator.share({files:[file],title:"Nuestra cita",text:"Tengo una invitación para ti ♥"}); } catch(error) { if(error.name!=="AbortError") toast("No se pudo compartir; puedes descargarla"); }
